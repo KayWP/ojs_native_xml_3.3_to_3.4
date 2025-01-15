@@ -13,7 +13,7 @@ import xml.etree.ElementTree as ET
 
 
 xml_file = 'test.xml'
-test_galley = 'C:/Users/kayp/GitHub/ojs-tools-martijn/test/test.txt'
+test_galley = 'test/test.txt'
 
 
 # In[14]:
