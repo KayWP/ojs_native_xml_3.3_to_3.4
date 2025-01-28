@@ -39,7 +39,7 @@ def main():
     row_id = 0
     
     for article in articles:
-        print(row_id)
+        #print(row_id)
         processed = get_article_info(article, root, row_id)
         df = pd.DataFrame.from_dict(processed.to_row())
         rows.append(df)
@@ -53,14 +53,20 @@ def main():
     
     df = df.rename(columns={"article_id": "id"})
     
+    df['volume'] = df['volume'].astype(str)
+    
+    print(df['issue'].dtype)
     df['issue'] = df['issue'].astype(str)
-        
+    print(df['issue'].dtype)
+    print(df['issue'].unique())
+
     df.to_csv('output.csv', sep=';', index=False, encoding='utf-8')
+
     
     return df
 
 
-# In[23]:
+# In[4]:
 
 
 def extract_base64(article_node):
@@ -82,7 +88,7 @@ def extract_base64(article_node):
     return base64_contents
 
 
-# In[4]:
+# In[5]:
 
 
 class Author:
@@ -91,7 +97,7 @@ class Author:
         self.last_name = last_name
 
 
-# In[5]:
+# In[6]:
 
 
 class Article:
@@ -153,7 +159,7 @@ class Article:
                 'file': [self.base64_file],
                 'publication_date': [self.publication_date],
                 'year': [self.year],
-                'vol': [self.vol],
+                'volume': [self.vol],
                 'issue': [self.issue],
                 'page_number': [self.page_number],
                 'section_title': [self.section_title],
@@ -168,7 +174,7 @@ class Article:
         return output
 
 
-# In[6]:
+# In[7]:
 
 
 # Function to find the parent issue of a given article node
@@ -179,7 +185,7 @@ def find_parent_issue(article_node, root):
     return None
 
 
-# In[7]:
+# In[8]:
 
 
 def get_article_info(article_node, root, article_id):
@@ -268,17 +274,23 @@ def get_article_info(article_node, root, article_id):
                  locale)
 
 
-# In[8]:
+# In[9]:
 
 
 if __name__ == "__main__":
     main()
 
 
-# In[9]:
+# In[10]:
 
 
 main()
+
+
+# In[ ]:
+
+
+
 
 
 # In[ ]:
