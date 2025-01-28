@@ -13,10 +13,10 @@ import xml.etree.ElementTree as ET
 
 
 xml_file = 'test.xml'
-test_galley = 'test/test.txt'
+test_galley = 'C:/Users/kayp/GitHub/ojs-tools-martijn/test/test.txt'
 
 
-# In[14]:
+# In[3]:
 
 
 def main():
@@ -60,10 +60,26 @@ def main():
     return df
 
 
-# In[ ]:
+# In[23]:
 
 
+def extract_base64(article_node):
+    # Find all submission files in the article node
+    submission_files = article_node.findall('{http://pkp.sfu.ca}submission_file')
 
+    # Iterate through each submission file
+    for submission in submission_files:
+        # Check each file inside the submission file
+        for file in submission.findall('{http://pkp.sfu.ca}file'):
+            # Check if the genre is 'Manuscript'
+            if submission.get('genre') == 'Manuscript':
+                # Find the <embed> tag that contains the base64 content
+                embed = file.find('{http://pkp.sfu.ca}embed')
+                if embed is not None:
+                    # Add the base64 content to the list
+                    base64_contents = embed.text
+                    
+    return base64_contents
 
 
 # In[4]:
@@ -165,7 +181,7 @@ def find_parent_issue(article_node, root):
 
 def get_article_info(article_node, root, article_id):
     
-    base64_file = test_galley
+    base64_file = extract_base64(article_node)
     
     publications = article_node.findall('{http://pkp.sfu.ca}publication')
     publication = publications[0]
