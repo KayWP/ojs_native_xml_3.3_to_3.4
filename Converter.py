@@ -103,6 +103,7 @@ class Article:
                  base64_file, 
                  publication_date, 
                  year, 
+                 vol,
                  issue, 
                  page_number, 
                  section_title,
@@ -119,6 +120,7 @@ class Article:
         self.base64_file = base64_file
         self.publication_date = publication_date
         self.year = year
+        self.vol = vol
         self.issue = issue
         self.page_number = page_number
         self.section_title = section_title
@@ -151,6 +153,7 @@ class Article:
                 'file': [self.base64_file],
                 'publication_date': [self.publication_date],
                 'year': [self.year],
+                'vol': [self.vol],
                 'issue': [self.issue],
                 'page_number': [self.page_number],
                 'section_title': [self.section_title],
@@ -180,6 +183,9 @@ def find_parent_issue(article_node, root):
 
 
 def get_article_info(article_node, root, article_id):
+    
+    #placeholder value
+    vol = '1'
     
     base64_file = extract_base64(article_node)
     
@@ -251,6 +257,7 @@ def get_article_info(article_node, root, article_id):
                  base64_file, 
                  publication_date,
                  year, 
+                 vol,  
                  issue, 
                  page_number, 
                  section_title,
