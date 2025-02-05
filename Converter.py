@@ -195,10 +195,13 @@ def get_keywords(keywords_node):
         output.append(keyword.text)
     
     output_string = ''
+    first = False
     for keyword in output:
-        output_string = output_string + keyword + '[;sep;]'
-    
-    output_string.strip('[;sep;]')
+        if first:
+            output_string = output_string + '[;sep;]' + keyword  
+        else:
+            output_string = output_string + keyword
+            first = True
     
     return output_string
 
