@@ -90,9 +90,12 @@ def extract_base64(article_node):
 
 
 class Author:
-    def __init__(self, first_name, last_name):
+    def __init__(self, first_name, last_name, country, affiliation, email):
         self.first_name = first_name
         self.last_name = last_name
+        self.country = country
+        self.affiliation = affiliation
+        self.email = email
 
 
 # In[6]:
@@ -144,8 +147,14 @@ class Article:
         for a in self.authors:
             first_name_column = 'author_given_name_' + str(author_id)
             last_name_column = 'author_family_name_' + str(author_id)
+            affiliation_column = 'author_affiliation_' + str(author_id)
+            country_column = 'author_country' + str(author_id)
+            email_column = 'author_email' + str(author_id)
             output[first_name_column] = [a.first_name]
             output[last_name_column] = [a.last_name]
+            output[affiliation_column] = [a.affiliation]
+            output[country_column] = [a.country]
+            output[email_column] = [a.email]
             author_id += 1
         
         return output
@@ -248,7 +257,10 @@ def get_article_info(article_node, root, article_id):
     for a in author_list:
         first_name = a.find('{http://pkp.sfu.ca}givenname').text
         last_name = a.find('{http://pkp.sfu.ca}familyname').text
-        authors.append(Author(first_name, last_name))
+        country = a.find('{http://pkp.sfu.ca}country').text
+        email = a.find('{http://pkp.sfu.ca}email').text
+        affiliation = a.find('{http://pkp.sfu.ca}affiliation').text
+        authors.append(Author(first_name, last_name, country, affiliation, email))
         
     parent_issue = find_parent_issue(article_node, root)
     issue_identification = parent_issue.find('{http://pkp.sfu.ca}issue_identification')
