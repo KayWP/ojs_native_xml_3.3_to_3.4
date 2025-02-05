@@ -148,8 +148,8 @@ class Article:
             first_name_column = 'author_given_name_' + str(author_id)
             last_name_column = 'author_family_name_' + str(author_id)
             affiliation_column = 'author_affiliation_' + str(author_id)
-            country_column = 'author_country' + str(author_id)
-            email_column = 'author_email' + str(author_id)
+            country_column = 'author_country_' + str(author_id)
+            email_column = 'author_email_' + str(author_id)
             output[first_name_column] = [a.first_name]
             output[last_name_column] = [a.last_name]
             output[affiliation_column] = [a.affiliation]
@@ -257,9 +257,22 @@ def get_article_info(article_node, root, article_id):
     for a in author_list:
         first_name = a.find('{http://pkp.sfu.ca}givenname').text
         last_name = a.find('{http://pkp.sfu.ca}familyname').text
-        country = a.find('{http://pkp.sfu.ca}country').text
-        email = a.find('{http://pkp.sfu.ca}email').text
-        affiliation = a.find('{http://pkp.sfu.ca}affiliation').text
+        
+        try:
+            country = a.find('{http://pkp.sfu.ca}country').text
+        except AttributeError:
+            country = ''
+        
+        try:
+            email = a.find('{http://pkp.sfu.ca}email').text
+        except AttributeError:
+            email = ''
+            
+        try:    
+            affiliation = a.find('{http://pkp.sfu.ca}affiliation').text
+        except AttributeError:
+            affiliation = ''
+            
         authors.append(Author(first_name, last_name, country, affiliation, email))
         
     parent_issue = find_parent_issue(article_node, root)
