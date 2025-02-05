@@ -55,10 +55,8 @@ def main():
     
     df['volume'] = df['volume'].astype(str)
     
-    print(df['issue'].dtype)
+    
     df['issue'] = df['issue'].astype(str)
-    print(df['issue'].dtype)
-    print(df['issue'].unique())
 
     df.to_csv('output.csv', sep=';', index=False, encoding='utf-8')
 
@@ -117,7 +115,8 @@ class Article:
                  section_reference,
                  doi,
                  authors, 
-                 locale):
+                 locale,
+                 keywords):
         
         self.article_id = article_id
         self.title = title
@@ -135,6 +134,7 @@ class Article:
         self.doi = doi
         self.authors = authors
         self.locale = locale
+        self.keywords = keywords
     
     def export_authors(self):
         #generate a dict with authors and column titles
@@ -165,7 +165,8 @@ class Article:
                 'section_title': [self.section_title],
                 'section_policy': [self.section_policy],
                 'section_reference': [self.section_reference],
-                'doi': [self.doi]}
+                'doi': [self.doi],
+                 'keywords': [self.keywords]}
         
         authors = self.export_authors()
         
@@ -185,6 +186,23 @@ def find_parent_issue(article_node, root):
     return None
 
 
+# In[ ]:
+
+
+def get_keywords(keywords_node):
+    output = []
+    for keyword in keywords_node.findall('.//{http://pkp.sfu.ca}keyword'):
+        output.append(keyword.text)
+    
+    output_string = ''
+    for keyword in output:
+        output_string = output_string + keyword + '[;sep;]'
+    
+    output_string.strip('[;sep;]')
+    
+    return output_string
+
+
 # In[8]:
 
 
@@ -201,6 +219,8 @@ def get_article_info(article_node, root, article_id):
     locale = publication.attrib['locale']
     publication_date = publication.attrib['date_published']
     section_reference = publication.attrib['section_ref']
+    
+    keywords = get_keywords(publication.find('{http://pkp.sfu.ca}keywords'))
     
     for id_node in publication.findall('{http://pkp.sfu.ca}id'):
         if id_node.get('type') == 'doi':  # Check for the 'type' attribute
@@ -271,7 +291,8 @@ def get_article_info(article_node, root, article_id):
                  section_reference,
                  doi,
                  authors, 
-                 locale)
+                 locale,
+                 keywords)
 
 
 # In[9]:
@@ -279,12 +300,6 @@ def get_article_info(article_node, root, article_id):
 
 if __name__ == "__main__":
     main()
-
-
-# In[10]:
-
-
-main()
 
 
 # In[ ]:
