@@ -7,6 +7,7 @@
 import pandas as pd
 import sys
 import xml.etree.ElementTree as ET
+import html
 
 
 # In[2]:
@@ -241,6 +242,7 @@ def get_article_info(article_node, root, article_id):
     for title_node in publication.findall('{http://pkp.sfu.ca}title'):
         if title_node.get('locale') == locale:
             title = title_node.text
+            title = html.unescape(title)
     
     for abstract_node in publication.findall('{http://pkp.sfu.ca}abstract'):
         if abstract_node.get('locale') == locale:
