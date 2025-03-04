@@ -251,7 +251,7 @@ def get_article_info(article_node, root, article_id):
     try:
         page_number = publication.findall('{http://pkp.sfu.ca}pages')[0].text
     except IndexError:
-        page_number = ''
+        page_number = ' '
 
         
     author_list = publication.findall('.//{http://pkp.sfu.ca}author')
